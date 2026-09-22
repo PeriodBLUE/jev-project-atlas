@@ -328,106 +328,96 @@ def generate_readme_en(
     projects: list[dict[str, Any]], discovered: list[dict[str, Any]], stamp: str
 ) -> str:
     stats = readme_stats(projects, discovered)
-    category_rows = "\n".join(
-        f"| {name} | **{count}** |" for name, count in stats["categories"].most_common()
-    )
-    project_rows = "\n".join(
-        f"| [{p['repo']}]({p['url']}) | {escape_cell(p['summary_en'] or p['summary_zh'])} | **{p.get('stars', 0):,}** | `{p.get('license') or 'Unknown'}` |"
-        for p in stats["top_projects"]
-    )
-    language_line = " · ".join(
-        f"`{name}` {count}" for name, count in stats["languages"].most_common(8)
-    )
+    by_repo = {project["repo"].lower(): project for project in projects}
+
+    def item(repo: str) -> str:
+        project = by_repo[repo.lower()]
+        summary = html.escape(project["summary_en"] or project["summary_zh"])
+        return f'<a href="{project["url"]}"><strong>{project["repo"]}</strong></a><br><sub>{summary}</sub>'
+
     return f"""<div align=\"center\">
 
 <a href=\"https://periodblue.github.io/jev-project-atlas/\"><img src=\"assets/banner.svg\" alt=\"JEV Project Atlas\" width=\"100%\" /></a>
 
-# JEV Project Atlas
+### Know which JEV projects are real.
 
-### The source-backed map of the JEV / TypeSafe System One ecosystem.
+**{len(projects)} projects with pinned source evidence — searchable by use case, language, license, and the exact point where JEV makes a decision.**
 
-[![Verified](https://img.shields.io/badge/source--verified-{len(projects)}-2dd4bf?style=for-the-badge)](CATALOG.md)
-[![Discovered](https://img.shields.io/badge/topic--discovered-{len(discovered)}-60a5fa?style=for-the-badge)](data/discovered-repos.json)
-[![Updated](https://img.shields.io/badge/snapshot-{stamp.replace('-', '--')}-a78bfa?style=for-the-badge)](METHODOLOGY.md)
+[![verified](https://img.shields.io/badge/source_verified-{len(projects)}-14b8a6?style=flat-square)](CATALOG.md)
+[![discovered](https://img.shields.io/badge/topic_discovered-{len(discovered)}-3b82f6?style=flat-square)](data/discovered-repos.json)
+[![updated](https://img.shields.io/badge/updated-{stamp.replace('-', '--')}-8b5cf6?style=flat-square)](METHODOLOGY.md)
+[![license](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
 
-<a href=\"https://periodblue.github.io/jev-project-atlas/\"><img src=\"https://img.shields.io/badge/Explore_the_live_atlas-0f766e?style=for-the-badge&logo=safari&logoColor=white\" alt=\"Explore the live atlas\" /></a>
-<a href=\"CATALOG.md\"><img src=\"https://img.shields.io/badge/Browse_all_projects-1d4ed8?style=for-the-badge&logo=github&logoColor=white\" alt=\"Browse all projects\" /></a>
+**[Explore the live atlas →](https://periodblue.github.io/jev-project-atlas/)** &nbsp;·&nbsp; [Browse the catalog](CATALOG.md) &nbsp;·&nbsp; [Use the data](#use-the-data)
 
 **English** · [简体中文](README.zh-CN.md)
 
 </div>
 
-> [!TIP]
-> **Start with the [interactive atlas](https://periodblue.github.io/jev-project-atlas/)** — search 479 verified projects by domain, language, license, or decision point.
+<br>
 
-## A map, not a hype list
+<a href=\"https://periodblue.github.io/jev-project-atlas/\"><img src=\"assets/atlas-preview.png\" alt=\"JEV Project Atlas interactive explorer\" width=\"100%\" /></a>
 
-JEV is TypeSafe AI's fast, typed decision model for classification, routing, scoring, ranking, verification, and guardrails. This atlas separates projects backed by inspectable source evidence from repositories that merely carry a topic label.
+<p align=\"center\"><sub>Search the verified ecosystem in the <a href=\"https://periodblue.github.io/jev-project-atlas/\">interactive explorer</a>.</sub></p>
+
+## The JEV ecosystem, without the noise
+
+GitHub has **{len(discovered):,} repositories tagged `jev`**. A topic tells you almost nothing: the project may call JEV in production, mention it in a roadmap, imitate its interface, or simply carry a noisy label.
+
+**JEV Project Atlas tells those apart.** It keeps every discoverable lead, but only promotes a project after its public source reveals the actual integration or decision point.
 
 <table>
 <tr>
-<td align=\"center\" width=\"33%\"><h2>{len(projects)}</h2><strong>Source-verified</strong><br><sub>Pinned evidence for the JEV decision point</sub></td>
-<td align=\"center\" width=\"33%\"><h2>{len(discovered):,}</h2><strong>Topic-discovered</strong><br><sub>The full public GitHub discovery snapshot</sub></td>
-<td align=\"center\" width=\"33%\"><h2>{len(stats['categories'])}</h2><strong>Real-world domains</strong><br><sub>From browser control to model routing</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(projects)}</h2><b>verified projects</b><br><sub>each linked to immutable source</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(stats['categories'])}</h2><b>application domains</b><br><sub>from agents to databases</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(discovered):,}</h2><b>repos monitored</b><br><sub>the recall layer stays searchable</sub></td>
 </tr>
 </table>
 
-> [!IMPORTANT]
-> **Source-verified does not mean security-audited, benchmark-reproduced, or production-endorsed.** JEV itself is a hosted model; open SDKs, integrations, and compatible implementations are not open model weights.
+## Start exploring
 
-## How trust flows through the atlas
+<table>
+<tr>
+<td width=\"33%\" valign=\"top\"><h3>🧩 Build with JEV</h3>{item('vercel/ai')}<br><br>{item('langchain-ai/langchain')}<br><br>{item('pydantic/pydantic-ai')}</td>
+<td width=\"33%\" valign=\"top\"><h3>⚡ See it decide</h3>{item('browser-use/jev-ultrafast')}<br><br>{item('trycua/cua')}<br><br>{item('realZachi/pg-jev')}</td>
+<td width=\"33%\" valign=\"top\"><h3>🧪 Run the shape locally</h3>{item('jaredpalmer/kev')}<br><br>{item('featherless-ai/simple-jev')}</td>
+</tr>
+</table>
 
-```mermaid
-flowchart LR
-    A[GitHub discovery] --> B{{Evidence gate}}
-    B -->|Pinned source found| C[Verified catalog]
-    B -->|Evidence missing| D[Discovery backlog]
-    C --> E[Searchable atlas]
-    C --> F[JSON datasets]
-    C --> G[Weekly refresh]
+**[See all {len(projects)} verified projects →](CATALOG.md)**
+
+## Why trust this list?
+
+1. **Discover broadly.** The sync scans the whole public `jev` topic, split to avoid GitHub's 1,000-result search cap.
+2. **Verify narrowly.** A project enters the catalog only when a reviewer can point to an immutable source file where JEV is called, adapted, or reimplemented.
+3. **Explain plainly.** Every entry says what the project does, where JEV decides, and what evidence supports the claim.
+
+> [!NOTE]
+> “Verified” means the public source was inspected. It does **not** mean security-audited, benchmark-reproduced, or production-endorsed. JEV itself is hosted; open SDKs and compatible projects are not open JEV weights.
+
+## Use the data
+
+Both layers are committed as clean JSON. For example, list verified Python projects:
+
+```bash
+curl -sL https://raw.githubusercontent.com/PeriodBLUE/jev-project-atlas/main/data/verified-projects.json \\
+  | jq -r '.projects[] | select(.language == "Python") | .repo'
 ```
 
-Every verified entry answers three questions: **What does it do? Where does JEV decide? What public source proves it?** The broader topic snapshot is retained for recall, but never presented as verified.
+- [`verified-projects.json`](data/verified-projects.json) — curated entries, summaries, categories, metadata, and pinned source evidence.
+- [`discovered-repos.json`](data/discovered-repos.json) — the complete discovery snapshot, including unverified leads.
 
-## Projects worth opening first
-
-| Project | Why it matters | Stars | License |
-|---|---|---:|---|
-{project_rows}
-
-## Explore the ecosystem
-
-| Domain | Projects |
-|---|---:|
-{category_rows}
-
-**Leading languages:** {language_line}
-
-## Use the atlas your way
-
-| I want to… | Go here |
-|---|---|
-| Search and filter visually | **[Interactive atlas →](https://periodblue.github.io/jev-project-atlas/)** |
-| Read every verified entry | **[Full catalog →](CATALOG.md)** |
-| Analyze or build on the data | [Verified JSON](data/verified-projects.json) · [Discovery JSON](data/discovered-repos.json) |
-| Audit the inclusion rules | [Methodology](METHODOLOGY.md) |
-| Submit a missing project | [Contribution guide](CONTRIBUTING.md) |
-
-## Reproducible by default
+## Keep it current
 
 ```bash
 python scripts/sync.py
 ```
 
-The zero-dependency sync script refreshes GitHub discovery, normalizes the source-reviewed dataset, and rebuilds both languages, both catalogs, and the live explorer. GitHub Actions runs it weekly.
+No package install. The standard-library script refreshes discovery and rebuilds the English and Chinese READMEs, catalogs, datasets, and explorer. GitHub Actions runs it every week.
 
-## Provenance
+---
 
-The verified layer builds on the MIT-licensed source review in [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects), normalized and presented here as a two-layer atlas. Discovery comes directly from the [GitHub `jev` topic](https://github.com/topics/jev). See [third-party notices](THIRD_PARTY_NOTICES.md).
-
-## License
-
-Atlas code and original content are [MIT licensed](LICENSE). Listed projects keep their own licenses.
+<p align=\"center\"><b>Found something missing?</b> <a href=\"CONTRIBUTING.md\">Submit a project</a> · <a href=\"METHODOLOGY.md\">Read the methodology</a> · <a href=\"THIRD_PARTY_NOTICES.md\">Provenance</a> · <a href=\"LICENSE\">MIT License</a></p>
 """
 
 
@@ -435,106 +425,96 @@ def generate_readme_zh(
     projects: list[dict[str, Any]], discovered: list[dict[str, Any]], stamp: str
 ) -> str:
     stats = readme_stats(projects, discovered)
-    category_rows = "\n".join(
-        f"| {name} | **{count}** |" for name, count in stats["categories"].most_common()
-    )
-    project_rows = "\n".join(
-        f"| [{p['repo']}]({p['url']}) | {escape_cell(p['summary_zh'] or p['summary_en'])} | **{p.get('stars', 0):,}** | `{p.get('license') or 'Unknown'}` |"
-        for p in stats["top_projects"]
-    )
-    language_line = " · ".join(
-        f"`{name}` {count}" for name, count in stats["languages"].most_common(8)
-    )
+    by_repo = {project["repo"].lower(): project for project in projects}
+
+    def item(repo: str) -> str:
+        project = by_repo[repo.lower()]
+        summary = html.escape(project["summary_zh"] or project["summary_en"])
+        return f'<a href="{project["url"]}"><strong>{project["repo"]}</strong></a><br><sub>{summary}</sub>'
+
     return f"""<div align=\"center\">
 
 <a href=\"https://periodblue.github.io/jev-project-atlas/\"><img src=\"assets/banner.svg\" alt=\"JEV Project Atlas\" width=\"100%\" /></a>
 
-# JEV Project Atlas · JEV 项目全景图
+### 看清哪些 JEV 项目是真的。
 
-### 有源码证据的 JEV / TypeSafe System One 生态地图。
+**{len(projects)} 个项目附有固定源码证据，可按用途、语言、许可证以及 JEV 的准确决策点搜索。**
 
-[![Verified](https://img.shields.io/badge/源码核验-{len(projects)}-2dd4bf?style=for-the-badge)](CATALOG.zh-CN.md)
-[![Discovered](https://img.shields.io/badge/Topic发现-{len(discovered)}-60a5fa?style=for-the-badge)](data/discovered-repos.json)
-[![Updated](https://img.shields.io/badge/数据快照-{stamp.replace('-', '--')}-a78bfa?style=for-the-badge)](METHODOLOGY.zh-CN.md)
+[![verified](https://img.shields.io/badge/源码已核验-{len(projects)}-14b8a6?style=flat-square)](CATALOG.zh-CN.md)
+[![discovered](https://img.shields.io/badge/Topic已发现-{len(discovered)}-3b82f6?style=flat-square)](data/discovered-repos.json)
+[![updated](https://img.shields.io/badge/更新-{stamp.replace('-', '--')}-8b5cf6?style=flat-square)](METHODOLOGY.zh-CN.md)
+[![license](https://img.shields.io/badge/许可证-MIT-f59e0b?style=flat-square)](LICENSE)
 
-<a href=\"https://periodblue.github.io/jev-project-atlas/?lang=zh\"><img src=\"https://img.shields.io/badge/打开在线全景图-0f766e?style=for-the-badge&logo=safari&logoColor=white\" alt=\"打开在线全景图\" /></a>
-<a href=\"CATALOG.zh-CN.md\"><img src=\"https://img.shields.io/badge/浏览全部项目-1d4ed8?style=for-the-badge&logo=github&logoColor=white\" alt=\"浏览全部项目\" /></a>
+**[打开在线全景图 →](https://periodblue.github.io/jev-project-atlas/?lang=zh)** &nbsp;·&nbsp; [浏览完整目录](CATALOG.zh-CN.md) &nbsp;·&nbsp; [使用数据](#使用数据)
 
 [English](README.md) · **简体中文**
 
 </div>
 
-> [!TIP]
-> 建议从[在线项目全景图](https://periodblue.github.io/jev-project-atlas/?lang=zh)开始：可按领域、语言、许可证或决策点搜索 479 个已核验项目。
+<br>
 
-## 这是一张地图，不是热度榜
+<a href=\"https://periodblue.github.io/jev-project-atlas/?lang=zh\"><img src=\"assets/atlas-preview.png\" alt=\"JEV Project Atlas 在线项目全景图\" width=\"100%\" /></a>
 
-JEV 是 TypeSafe AI 面向分类、路由、评分、排序、验证与安全门控的快速类型化决策模型。本项目将有可检查源码证据的真实集成，与仅贴有 topic 标签的候选仓库严格分开。
+<p align=\"center\"><sub>在<a href=\"https://periodblue.github.io/jev-project-atlas/?lang=zh\">在线项目全景图</a>中搜索整个已核验生态。</sub></p>
+
+## 去掉噪声之后的 JEV 生态
+
+GitHub 上已有 **{len(discovered):,} 个仓库带有 `jev` topic**。但标签无法说明项目是在真实调用 JEV、计划未来接入、模仿接口，还是仅仅误贴了标签。
+
+**JEV Project Atlas 把它们分清楚。** 所有候选都会被保留，但只有在公开源码中找到真实集成或决策点，项目才会进入主目录。
 
 <table>
 <tr>
-<td align=\"center\" width=\"33%\"><h2>{len(projects)}</h2><strong>源码已核验</strong><br><sub>能定位 JEV 决策点的固定提交证据</sub></td>
-<td align=\"center\" width=\"33%\"><h2>{len(discovered):,}</h2><strong>Topic 已发现</strong><br><sub>GitHub 公开仓库的完整发现快照</sub></td>
-<td align=\"center\" width=\"33%\"><h2>{len(stats['categories'])}</h2><strong>真实应用领域</strong><br><sub>从浏览器控制到模型路由</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(projects)}</h2><b>已核验项目</b><br><sub>每项都链接到不可变源码</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(stats['categories'])}</h2><b>应用领域</b><br><sub>从 Agent 到数据库</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(discovered):,}</h2><b>持续监测仓库</b><br><sub>完整发现层始终保留</sub></td>
 </tr>
 </table>
 
-> [!IMPORTANT]
-> **源码已核验不代表通过安全审计、性能复现或生产背书。** JEV 本体是托管模型；开源 SDK、集成与兼容实现不等于开放模型权重。
+## 从这里开始探索
 
-## 可信信息如何进入全景图
+<table>
+<tr>
+<td width=\"33%\" valign=\"top\"><h3>🧩 用 JEV 构建</h3>{item('vercel/ai')}<br><br>{item('langchain-ai/langchain')}<br><br>{item('pydantic/pydantic-ai')}</td>
+<td width=\"33%\" valign=\"top\"><h3>⚡ 看 JEV 做决策</h3>{item('browser-use/jev-ultrafast')}<br><br>{item('trycua/cua')}<br><br>{item('realZachi/pg-jev')}</td>
+<td width=\"33%\" valign=\"top\"><h3>🧪 本地运行兼容形态</h3>{item('jaredpalmer/kev')}<br><br>{item('featherless-ai/simple-jev')}</td>
+</tr>
+</table>
 
-```mermaid
-flowchart LR
-    A[GitHub 全量发现] --> B{{证据门槛}}
-    B -->|找到固定源码| C[已核验目录]
-    B -->|证据不足| D[待核验发现层]
-    C --> E[在线搜索]
-    C --> F[JSON 数据]
-    C --> G[每周自动更新]
+**[查看全部 {len(projects)} 个已核验项目 →](CATALOG.zh-CN.md)**
+
+## 为什么可以相信这份目录？
+
+1. **广泛发现。** 同步程序扫描完整的公开 `jev` topic，并拆分查询以绕过 GitHub 单次 1,000 条上限。
+2. **严格核验。** 只有当审查者能指向固定版本源码中的 JEV 调用、适配或兼容实现时，项目才进入主目录。
+3. **说人话。** 每个条目都说明项目做什么、JEV 在哪里决策、哪段源码能够证明。
+
+> [!NOTE]
+> “已核验”表示检查过公开源码，不代表通过安全审计、复现性能或获得生产背书。JEV 本体是托管模型；开源 SDK 和兼容项目并不是开放的 JEV 权重。
+
+## 使用数据
+
+发现层和核验层都以干净的 JSON 提交。例如，列出使用 Python 的已核验项目：
+
+```bash
+curl -sL https://raw.githubusercontent.com/PeriodBLUE/jev-project-atlas/main/data/verified-projects.json \\
+  | jq -r '.projects[] | select(.language == "Python") | .repo'
 ```
 
-每个已核验条目都回答三个问题：**项目做什么？JEV 在哪里决策？哪段公开源码可以证明？** Topic 快照用于查漏，但绝不会被冒充为已核验项目。
+- [`verified-projects.json`](data/verified-projects.json) — 已核验条目、简介、分类、元数据与固定源码证据。
+- [`discovered-repos.json`](data/discovered-repos.json) — 完整发现快照，包括尚未核验的候选项目。
 
-## 值得先看的项目
-
-| 项目 | 为什么值得看 | 星标 | 许可证 |
-|---|---|---:|---|
-{project_rows}
-
-## 探索生态
-
-| 应用领域 | 项目数 |
-|---|---:|
-{category_rows}
-
-**主要语言：** {language_line}
-
-## 按你的方式使用
-
-| 我想…… | 去这里 |
-|---|---|
-| 可视化搜索和筛选 | **[在线项目全景图 →](https://periodblue.github.io/jev-project-atlas/?lang=zh)** |
-| 阅读全部核验条目 | **[中文完整目录 →](CATALOG.zh-CN.md)** |
-| 分析或二次开发 | [已核验 JSON](data/verified-projects.json) · [发现层 JSON](data/discovered-repos.json) |
-| 检查收录标准 | [方法与边界](METHODOLOGY.zh-CN.md) |
-| 提交遗漏项目 | [贡献指南](CONTRIBUTING.zh-CN.md) |
-
-## 默认可复现
+## 保持更新
 
 ```bash
 python scripts/sync.py
 ```
 
-零依赖同步脚本会刷新 GitHub 发现层、规范化源码核验数据，并重建中英文 README、中英文目录和在线搜索页。GitHub Actions 每周自动运行。
+无需安装任何依赖。标准库脚本会刷新发现层，并重建中英文 README、目录、数据集和在线搜索页。GitHub Actions 每周自动执行。
 
-## 数据来源
+---
 
-核验层基于 [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects) 的 MIT 许可源码审查数据，并在本仓库中重新规范化、分层与呈现；发现层直接来自 [GitHub `jev` topic](https://github.com/topics/jev)。详见[第三方声明](THIRD_PARTY_NOTICES.md)。
-
-## 许可证
-
-本仓库代码与原创内容采用 [MIT License](LICENSE)，各被收录项目仍遵循其自身许可证。
+<p align=\"center\"><b>发现了遗漏？</b> <a href=\"CONTRIBUTING.zh-CN.md\">提交项目</a> · <a href=\"METHODOLOGY.zh-CN.md\">阅读方法</a> · <a href=\"THIRD_PARTY_NOTICES.md\">数据来源</a> · <a href=\"LICENSE\">MIT License</a></p>
 """
 
 

@@ -295,7 +295,7 @@ def generate_readme(
 [![Updated](https://img.shields.io/badge/updated-{stamp.replace('-', '--')}-a78bfa?style=flat-square)](METHODOLOGY.md)
 [![License](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
 
-[完整目录](CATALOG.md) · [可搜索页面](docs/index.html) · [方法与边界](METHODOLOGY.md) · [贡献项目](CONTRIBUTING.md)
+[完整目录](CATALOG.md) · [在线搜索](https://periodblue.github.io/jev-project-atlas/) · [方法与边界](METHODOLOGY.md) · [贡献项目](CONTRIBUTING.md)
 
 </div>
 
@@ -329,7 +329,7 @@ JEV 是 TypeSafe AI 面向分类、路由、评分、排序、验证与安全门
 ## 如何使用
 
 - 想找可直接用的项目：打开 [完整目录](CATALOG.md)，按领域浏览。
-- 想搜索、筛选、排序：打开 [可搜索页面](docs/index.html)。
+- 想搜索、筛选、排序：打开 [在线搜索页面](https://periodblue.github.io/jev-project-atlas/)。
 - 想做分析或二次开发：使用 [已核验 JSON](data/verified-projects.json) 和 [完整发现 JSON](data/discovered-repos.json)。
 - 想提交遗漏：阅读 [贡献指南](CONTRIBUTING.md)，请附仓库地址和 JEV 的源码使用位置。
 

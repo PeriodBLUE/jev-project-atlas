@@ -96,7 +96,9 @@ def fetch_verified() -> list[dict[str, Any]]:
                 "summary_zh": item.get("plainSummary") or "",
                 "summary_en": item.get("plainSummaryEn") or "",
                 "decision_point_zh": item.get("jevDecisionPoint") or "",
+                "decision_point_en": item.get("jevDecisionPointEn") or "",
                 "benefit_zh": item.get("highlightBenefit") or "",
+                "benefit_en": item.get("highlightBenefitEn") or "",
                 "license": item.get("license") or "Unknown",
                 "language": item.get("language"),
                 "stars": item.get("stars") or 0,
@@ -214,21 +216,39 @@ def escape_cell(value: Any) -> str:
     return text if len(text) <= 180 else text[:177].rstrip() + "…"
 
 
-def generate_catalog(projects: list[dict[str, Any]], stamp: str) -> str:
+def generate_catalog(projects: list[dict[str, Any]], stamp: str, locale: str = "en") -> str:
     grouped: dict[str, list[dict[str, Any]]] = {}
     for project in projects:
         grouped.setdefault(project["category"], []).append(project)
 
-    lines = [
-        "# JEV 已核验项目目录",
-        "",
-        f"> 数据快照：{stamp} · 共 **{len(projects)}** 个项目 · 按源码证据核验，不等同于运行时安全审计。",
-        "",
-        "[返回首页](README.md) · [方法说明](METHODOLOGY.md) · [机器可读数据](data/verified-projects.json)",
-        "",
-        "## 分类导航",
-        "",
-    ]
+    zh = locale == "zh"
+    lines = (
+        [
+            "# JEV 已核验项目目录",
+            "",
+            "[English](CATALOG.md) · **简体中文**",
+            "",
+            f"> 数据快照：{stamp} · 共 **{len(projects)}** 个项目 · 按源码证据核验，不等同于运行时安全审计。",
+            "",
+            "[返回首页](README.zh-CN.md) · [方法说明](METHODOLOGY.zh-CN.md) · [机器可读数据](data/verified-projects.json)",
+            "",
+            "## 分类导航",
+            "",
+        ]
+        if zh
+        else [
+            "# Source-verified JEV project catalog",
+            "",
+            "**English** · [简体中文](CATALOG.zh-CN.md)",
+            "",
+            f"> Snapshot: {stamp} · **{len(projects)}** projects · Verified from public source evidence; not a runtime or security audit.",
+            "",
+            "[Back to README](README.md) · [Methodology](METHODOLOGY.md) · [Machine-readable data](data/verified-projects.json)",
+            "",
+            "## Browse by category",
+            "",
+        ]
+    )
     for category in sorted(grouped):
         anchor = re.sub(r"[^a-z0-9\u4e00-\u9fff-]+", "-", category.lower()).strip("-")
         lines.append(f"- [{category} ({len(grouped[category])})](#{anchor})")
@@ -240,20 +260,30 @@ def generate_catalog(projects: list[dict[str, Any]], stamp: str) -> str:
                 "",
                 f"## {category}",
                 "",
-                "| 项目 | 简介 | 语言 | ⭐ | 许可证 | 证据 |",
+                (
+                    "| 项目 | 简介 | 语言 | ⭐ | 许可证 | 证据 |"
+                    if zh
+                    else "| Project | What it does | Language | ⭐ | License | Evidence |"
+                ),
                 "|---|---|---:|---:|---:|---|",
             ]
         )
         for item in items:
             evidence = (
-                f"[固定提交]({item['source_url']})" if item.get("source_url") else "已核验"
+                f"[{'固定提交' if zh else 'Pinned source'}]({item['source_url']})"
+                if item.get("source_url")
+                else ("已核验" if zh else "Verified")
             )
             lines.append(
                 "| "
                 + " | ".join(
                     [
                         f"[**{escape_cell(item['repo'])}**]({item['url']})",
-                        escape_cell(item["summary_zh"] or item["summary_en"]),
+                        escape_cell(
+                            (item["summary_zh"] or item["summary_en"])
+                            if zh
+                            else (item["summary_en"] or item["summary_zh"])
+                        ),
                         escape_cell(item.get("language") or "—"),
                         str(item.get("stars") or 0),
                         escape_cell(item.get("license") or "Unknown"),
@@ -262,92 +292,249 @@ def generate_catalog(projects: list[dict[str, Any]], stamp: str) -> str:
                 )
                 + " |"
             )
-    lines.extend(["", "---", "", "发现遗漏？请提交 Issue，并附上仓库地址与 JEV 使用位置。", ""])
+    lines.extend(
+        [
+            "",
+            "---",
+            "",
+            (
+                "发现遗漏？请提交 Issue，并附上仓库地址与 JEV 使用位置。"
+                if zh
+                else "Missing a project? Open an issue with the repository URL and the exact JEV integration point."
+            ),
+            "",
+        ]
+    )
     return "\n".join(lines)
 
 
-def generate_readme(
-    projects: list[dict[str, Any]], discovered: list[dict[str, Any]], stamp: str
-) -> str:
+def readme_stats(
+    projects: list[dict[str, Any]], discovered: list[dict[str, Any]]
+) -> dict[str, Any]:
     categories = Counter(p["category"] for p in projects)
     languages = Counter(p.get("language") or "Unknown" for p in projects)
-    top_projects = sorted(projects, key=lambda p: -int(p.get("stars") or 0))[:10]
+    top_projects = sorted(projects, key=lambda p: -int(p.get("stars") or 0))[:8]
     verified_keys = {p["repo"].lower() for p in projects}
     topic_verified = sum(1 for item in discovered if item["repo"].lower() in verified_keys)
-    top_category_rows = "\n".join(
-        f"| {name} | {count} |" for name, count in categories.most_common()
+    return {
+        "categories": categories,
+        "languages": languages,
+        "top_projects": top_projects,
+        "topic_verified": topic_verified,
+    }
+
+
+def generate_readme_en(
+    projects: list[dict[str, Any]], discovered: list[dict[str, Any]], stamp: str
+) -> str:
+    stats = readme_stats(projects, discovered)
+    category_rows = "\n".join(
+        f"| {name} | **{count}** |" for name, count in stats["categories"].most_common()
     )
-    top_project_rows = "\n".join(
-        f"| [{p['repo']}]({p['url']}) | {escape_cell(p['summary_zh'] or p['summary_en'])} | {p.get('stars', 0)} | {p.get('license') or 'Unknown'} |"
-        for p in top_projects
+    project_rows = "\n".join(
+        f"| [{p['repo']}]({p['url']}) | {escape_cell(p['summary_en'] or p['summary_zh'])} | **{p.get('stars', 0):,}** | `{p.get('license') or 'Unknown'}` |"
+        for p in stats["top_projects"]
     )
-    language_line = " · ".join(f"{name} {count}" for name, count in languages.most_common(8))
+    language_line = " · ".join(
+        f"`{name}` {count}" for name, count in stats["languages"].most_common(8)
+    )
     return f"""<div align=\"center\">
 
-<img src=\"assets/banner.svg\" alt=\"JEV Project Atlas\" width=\"100%\" />
+<a href=\"https://periodblue.github.io/jev-project-atlas/\"><img src=\"assets/banner.svg\" alt=\"JEV Project Atlas\" width=\"100%\" /></a>
 
-# JEV Project Atlas · JEV 项目全景图
+# JEV Project Atlas
 
-**发现、核验并总结 GitHub 上的 JEV / TypeSafe System One 项目。**
+### The source-backed map of the JEV / TypeSafe System One ecosystem.
 
-[![Verified](https://img.shields.io/badge/source--verified-{len(projects)}-2dd4bf?style=flat-square)](CATALOG.md)
-[![Discovered](https://img.shields.io/badge/topic--discovered-{len(discovered)}-60a5fa?style=flat-square)](data/discovered-repos.json)
-[![Updated](https://img.shields.io/badge/updated-{stamp.replace('-', '--')}-a78bfa?style=flat-square)](METHODOLOGY.md)
-[![License](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
+[![Verified](https://img.shields.io/badge/source--verified-{len(projects)}-2dd4bf?style=for-the-badge)](CATALOG.md)
+[![Discovered](https://img.shields.io/badge/topic--discovered-{len(discovered)}-60a5fa?style=for-the-badge)](data/discovered-repos.json)
+[![Updated](https://img.shields.io/badge/snapshot-{stamp.replace('-', '--')}-a78bfa?style=for-the-badge)](METHODOLOGY.md)
 
-[完整目录](CATALOG.md) · [在线搜索](https://periodblue.github.io/jev-project-atlas/) · [方法与边界](METHODOLOGY.md) · [贡献项目](CONTRIBUTING.md)
+<a href=\"https://periodblue.github.io/jev-project-atlas/\"><img src=\"https://img.shields.io/badge/Explore_the_live_atlas-0f766e?style=for-the-badge&logo=safari&logoColor=white\" alt=\"Explore the live atlas\" /></a>
+<a href=\"CATALOG.md\"><img src=\"https://img.shields.io/badge/Browse_all_projects-1d4ed8?style=for-the-badge&logo=github&logoColor=white\" alt=\"Browse all projects\" /></a>
+
+**English** · [简体中文](README.zh-CN.md)
 
 </div>
 
-## 一眼看懂
+> [!TIP]
+> **Start with the [interactive atlas](https://periodblue.github.io/jev-project-atlas/)** — search 479 verified projects by domain, language, license, or decision point.
 
-JEV 是 TypeSafe AI 面向分类、路由、评分、排序、验证与安全门控等任务的快速、类型化决策模型。本仓库不是简单复制 GitHub 搜索结果，而是把生态分成两个互不混淆的层级：
+## A map, not a hype list
 
-| 层级 | 数量 | 含义 |
-|---|---:|---|
-| ✅ 源码已核验 | **{len(projects)}** | 有固定提交的源码证据，能定位 JEV 在哪里做决策 |
-| 🔭 Topic 已发现 | **{len(discovered)}** | GitHub `jev` topic 的完整快照，包含待核验项目与噪声 |
-| 🔗 Topic 中已核验 | **{topic_verified}** | 同时出现在发现层和核验层的项目 |
+JEV is TypeSafe AI's fast, typed decision model for classification, routing, scoring, ranking, verification, and guardrails. This atlas separates projects backed by inspectable source evidence from repositories that merely carry a topic label.
+
+<table>
+<tr>
+<td align=\"center\" width=\"33%\"><h2>{len(projects)}</h2><strong>Source-verified</strong><br><sub>Pinned evidence for the JEV decision point</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(discovered):,}</h2><strong>Topic-discovered</strong><br><sub>The full public GitHub discovery snapshot</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(stats['categories'])}</h2><strong>Real-world domains</strong><br><sub>From browser control to model routing</sub></td>
+</tr>
+</table>
 
 > [!IMPORTANT]
-> “已核验”表示查看过公开源码证据，不代表项目已做安全审计、性能复现或生产可用性背书。JEV 本体是托管模型；开源 SDK、集成和兼容实现不等于开放模型权重。
+> **Source-verified does not mean security-audited, benchmark-reproduced, or production-endorsed.** JEV itself is a hosted model; open SDKs, integrations, and compatible implementations are not open model weights.
 
-## 值得先看的项目
+## How trust flows through the atlas
 
-| 项目 | 做什么 | ⭐ | 许可证 |
+```mermaid
+flowchart LR
+    A[GitHub discovery] --> B{{Evidence gate}}
+    B -->|Pinned source found| C[Verified catalog]
+    B -->|Evidence missing| D[Discovery backlog]
+    C --> E[Searchable atlas]
+    C --> F[JSON datasets]
+    C --> G[Weekly refresh]
+```
+
+Every verified entry answers three questions: **What does it do? Where does JEV decide? What public source proves it?** The broader topic snapshot is retained for recall, but never presented as verified.
+
+## Projects worth opening first
+
+| Project | Why it matters | Stars | License |
 |---|---|---:|---|
-{top_project_rows}
+{project_rows}
 
-## 生态分布
+## Explore the ecosystem
 
-| 分类 | 项目数 |
+| Domain | Projects |
 |---|---:|
-{top_category_rows}
+{category_rows}
 
-主要语言：{language_line}
+**Leading languages:** {language_line}
 
-## 如何使用
+## Use the atlas your way
 
-- 想找可直接用的项目：打开 [完整目录](CATALOG.md)，按领域浏览。
-- 想搜索、筛选、排序：打开 [在线搜索页面](https://periodblue.github.io/jev-project-atlas/)。
-- 想做分析或二次开发：使用 [已核验 JSON](data/verified-projects.json) 和 [完整发现 JSON](data/discovered-repos.json)。
-- 想提交遗漏：阅读 [贡献指南](CONTRIBUTING.md)，请附仓库地址和 JEV 的源码使用位置。
+| I want to… | Go here |
+|---|---|
+| Search and filter visually | **[Interactive atlas →](https://periodblue.github.io/jev-project-atlas/)** |
+| Read every verified entry | **[Full catalog →](CATALOG.md)** |
+| Analyze or build on the data | [Verified JSON](data/verified-projects.json) · [Discovery JSON](data/discovered-repos.json) |
+| Audit the inclusion rules | [Methodology](METHODOLOGY.md) |
+| Submit a missing project | [Contribution guide](CONTRIBUTING.md) |
 
-## 数据更新
+## Reproducible by default
 
 ```bash
 python scripts/sync.py
 ```
 
-脚本只依赖 Python 标准库，会重新抓取 GitHub topic、同步公开的源码核验数据并重建目录与搜索页。自动更新工作流每周运行一次，也可以手动触发。
+The zero-dependency sync script refreshes GitHub discovery, normalizes the source-reviewed dataset, and rebuilds both languages, both catalogs, and the live explorer. GitHub Actions runs it weekly.
 
-## 数据来源与致谢
+## Provenance
 
-已核验层基于 [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects) 的 MIT 许可数据，并在本仓库中进行字段规范化、分层和重新呈现；发现层直接来自 [GitHub `jev` topic](https://github.com/topics/jev)。详见 [第三方声明](THIRD_PARTY_NOTICES.md)。
+The verified layer builds on the MIT-licensed source review in [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects), normalized and presented here as a two-layer atlas. Discovery comes directly from the [GitHub `jev` topic](https://github.com/topics/jev). See [third-party notices](THIRD_PARTY_NOTICES.md).
+
+## License
+
+Atlas code and original content are [MIT licensed](LICENSE). Listed projects keep their own licenses.
+"""
+
+
+def generate_readme_zh(
+    projects: list[dict[str, Any]], discovered: list[dict[str, Any]], stamp: str
+) -> str:
+    stats = readme_stats(projects, discovered)
+    category_rows = "\n".join(
+        f"| {name} | **{count}** |" for name, count in stats["categories"].most_common()
+    )
+    project_rows = "\n".join(
+        f"| [{p['repo']}]({p['url']}) | {escape_cell(p['summary_zh'] or p['summary_en'])} | **{p.get('stars', 0):,}** | `{p.get('license') or 'Unknown'}` |"
+        for p in stats["top_projects"]
+    )
+    language_line = " · ".join(
+        f"`{name}` {count}" for name, count in stats["languages"].most_common(8)
+    )
+    return f"""<div align=\"center\">
+
+<a href=\"https://periodblue.github.io/jev-project-atlas/\"><img src=\"assets/banner.svg\" alt=\"JEV Project Atlas\" width=\"100%\" /></a>
+
+# JEV Project Atlas · JEV 项目全景图
+
+### 有源码证据的 JEV / TypeSafe System One 生态地图。
+
+[![Verified](https://img.shields.io/badge/源码核验-{len(projects)}-2dd4bf?style=for-the-badge)](CATALOG.zh-CN.md)
+[![Discovered](https://img.shields.io/badge/Topic发现-{len(discovered)}-60a5fa?style=for-the-badge)](data/discovered-repos.json)
+[![Updated](https://img.shields.io/badge/数据快照-{stamp.replace('-', '--')}-a78bfa?style=for-the-badge)](METHODOLOGY.zh-CN.md)
+
+<a href=\"https://periodblue.github.io/jev-project-atlas/?lang=zh\"><img src=\"https://img.shields.io/badge/打开在线全景图-0f766e?style=for-the-badge&logo=safari&logoColor=white\" alt=\"打开在线全景图\" /></a>
+<a href=\"CATALOG.zh-CN.md\"><img src=\"https://img.shields.io/badge/浏览全部项目-1d4ed8?style=for-the-badge&logo=github&logoColor=white\" alt=\"浏览全部项目\" /></a>
+
+[English](README.md) · **简体中文**
+
+</div>
+
+> [!TIP]
+> 建议从[在线项目全景图](https://periodblue.github.io/jev-project-atlas/?lang=zh)开始：可按领域、语言、许可证或决策点搜索 479 个已核验项目。
+
+## 这是一张地图，不是热度榜
+
+JEV 是 TypeSafe AI 面向分类、路由、评分、排序、验证与安全门控的快速类型化决策模型。本项目将有可检查源码证据的真实集成，与仅贴有 topic 标签的候选仓库严格分开。
+
+<table>
+<tr>
+<td align=\"center\" width=\"33%\"><h2>{len(projects)}</h2><strong>源码已核验</strong><br><sub>能定位 JEV 决策点的固定提交证据</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(discovered):,}</h2><strong>Topic 已发现</strong><br><sub>GitHub 公开仓库的完整发现快照</sub></td>
+<td align=\"center\" width=\"33%\"><h2>{len(stats['categories'])}</h2><strong>真实应用领域</strong><br><sub>从浏览器控制到模型路由</sub></td>
+</tr>
+</table>
+
+> [!IMPORTANT]
+> **源码已核验不代表通过安全审计、性能复现或生产背书。** JEV 本体是托管模型；开源 SDK、集成与兼容实现不等于开放模型权重。
+
+## 可信信息如何进入全景图
+
+```mermaid
+flowchart LR
+    A[GitHub 全量发现] --> B{{证据门槛}}
+    B -->|找到固定源码| C[已核验目录]
+    B -->|证据不足| D[待核验发现层]
+    C --> E[在线搜索]
+    C --> F[JSON 数据]
+    C --> G[每周自动更新]
+```
+
+每个已核验条目都回答三个问题：**项目做什么？JEV 在哪里决策？哪段公开源码可以证明？** Topic 快照用于查漏，但绝不会被冒充为已核验项目。
+
+## 值得先看的项目
+
+| 项目 | 为什么值得看 | 星标 | 许可证 |
+|---|---|---:|---|
+{project_rows}
+
+## 探索生态
+
+| 应用领域 | 项目数 |
+|---|---:|
+{category_rows}
+
+**主要语言：** {language_line}
+
+## 按你的方式使用
+
+| 我想…… | 去这里 |
+|---|---|
+| 可视化搜索和筛选 | **[在线项目全景图 →](https://periodblue.github.io/jev-project-atlas/?lang=zh)** |
+| 阅读全部核验条目 | **[中文完整目录 →](CATALOG.zh-CN.md)** |
+| 分析或二次开发 | [已核验 JSON](data/verified-projects.json) · [发现层 JSON](data/discovered-repos.json) |
+| 检查收录标准 | [方法与边界](METHODOLOGY.zh-CN.md) |
+| 提交遗漏项目 | [贡献指南](CONTRIBUTING.zh-CN.md) |
+
+## 默认可复现
+
+```bash
+python scripts/sync.py
+```
+
+零依赖同步脚本会刷新 GitHub 发现层、规范化源码核验数据，并重建中英文 README、中英文目录和在线搜索页。GitHub Actions 每周自动运行。
+
+## 数据来源
+
+核验层基于 [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects) 的 MIT 许可源码审查数据，并在本仓库中重新规范化、分层与呈现；发现层直接来自 [GitHub `jev` topic](https://github.com/topics/jev)。详见[第三方声明](THIRD_PARTY_NOTICES.md)。
 
 ## 许可证
 
-本仓库代码与原创内容采用 [MIT License](LICENSE)。各项目仍遵循它们各自的许可证；数据来源及再分发条款见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+本仓库代码与原创内容采用 [MIT License](LICENSE)，各被收录项目仍遵循其自身许可证。
 """
 
 
@@ -401,9 +588,17 @@ def main() -> None:
             "repositories": discovered,
         },
     )
-    (ROOT / "CATALOG.md").write_text(generate_catalog(projects, stamp), encoding="utf-8")
+    (ROOT / "CATALOG.md").write_text(
+        generate_catalog(projects, stamp, "en"), encoding="utf-8"
+    )
+    (ROOT / "CATALOG.zh-CN.md").write_text(
+        generate_catalog(projects, stamp, "zh"), encoding="utf-8"
+    )
     (ROOT / "README.md").write_text(
-        generate_readme(projects, discovered, stamp), encoding="utf-8"
+        generate_readme_en(projects, discovered, stamp), encoding="utf-8"
+    )
+    (ROOT / "README.zh-CN.md").write_text(
+        generate_readme_zh(projects, discovered, stamp), encoding="utf-8"
     )
     (DOCS_DIR / "data.js").write_text(generate_docs_data(projects, stamp), encoding="utf-8")
     print(f"verified={len(projects)} discovered={len(discovered)} updated={stamp}")

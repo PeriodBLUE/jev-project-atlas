@@ -30,7 +30,10 @@ a { color: inherit; }
 
 .hero, main, footer { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
 .hero { padding: 88px 0 48px; }
+.topline { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .eyebrow { color: var(--teal); font-size: .78rem; font-weight: 800; letter-spacing: .2em; text-decoration: none; }
+.locale-toggle { min-width: 58px; padding: 8px 13px; border: 1px solid rgba(94, 234, 212, .3); border-radius: 999px; color: var(--teal); background: rgba(15, 31, 50, .7); font: 700 .8rem/1 Inter, ui-sans-serif, system-ui, sans-serif; cursor: pointer; transition: border-color .18s ease, background .18s ease; }
+.locale-toggle:hover { border-color: var(--teal); background: rgba(45, 212, 191, .1); }
 h1 { margin: 22px 0 18px; max-width: 900px; font-size: clamp(2.7rem, 7vw, 5.8rem); line-height: .98; letter-spacing: -.055em; }
 h1 span { color: transparent; background: linear-gradient(90deg, var(--teal), var(--blue), var(--purple)); background-clip: text; }
 .hero > p { max-width: 700px; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.3rem); line-height: 1.7; }

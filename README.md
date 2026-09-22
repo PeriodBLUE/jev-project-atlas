@@ -1,91 +1,113 @@
 <div align="center">
 
-<img src="assets/banner.svg" alt="JEV Project Atlas" width="100%" />
+<a href="https://periodblue.github.io/jev-project-atlas/"><img src="assets/banner.svg" alt="JEV Project Atlas" width="100%" /></a>
 
-# JEV Project Atlas · JEV 项目全景图
+# JEV Project Atlas
 
-**发现、核验并总结 GitHub 上的 JEV / TypeSafe System One 项目。**
+### The source-backed map of the JEV / TypeSafe System One ecosystem.
 
-[![Verified](https://img.shields.io/badge/source--verified-479-2dd4bf?style=flat-square)](CATALOG.md)
-[![Discovered](https://img.shields.io/badge/topic--discovered-1161-60a5fa?style=flat-square)](data/discovered-repos.json)
-[![Updated](https://img.shields.io/badge/updated-2026--09--22-a78bfa?style=flat-square)](METHODOLOGY.md)
-[![License](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
+[![Verified](https://img.shields.io/badge/source--verified-479-2dd4bf?style=for-the-badge)](CATALOG.md)
+[![Discovered](https://img.shields.io/badge/topic--discovered-1169-60a5fa?style=for-the-badge)](data/discovered-repos.json)
+[![Updated](https://img.shields.io/badge/snapshot-2026--09--22-a78bfa?style=for-the-badge)](METHODOLOGY.md)
 
-[完整目录](CATALOG.md) · [在线搜索](https://periodblue.github.io/jev-project-atlas/) · [方法与边界](METHODOLOGY.md) · [贡献项目](CONTRIBUTING.md)
+<a href="https://periodblue.github.io/jev-project-atlas/"><img src="https://img.shields.io/badge/Explore_the_live_atlas-0f766e?style=for-the-badge&logo=safari&logoColor=white" alt="Explore the live atlas" /></a>
+<a href="CATALOG.md"><img src="https://img.shields.io/badge/Browse_all_projects-1d4ed8?style=for-the-badge&logo=github&logoColor=white" alt="Browse all projects" /></a>
+
+**English** · [简体中文](README.zh-CN.md)
 
 </div>
 
-## 一眼看懂
+> [!TIP]
+> **Start with the [interactive atlas](https://periodblue.github.io/jev-project-atlas/)** — search 479 verified projects by domain, language, license, or decision point.
 
-JEV 是 TypeSafe AI 面向分类、路由、评分、排序、验证与安全门控等任务的快速、类型化决策模型。本仓库不是简单复制 GitHub 搜索结果，而是把生态分成两个互不混淆的层级：
+## A map, not a hype list
 
-| 层级 | 数量 | 含义 |
-|---|---:|---|
-| ✅ 源码已核验 | **479** | 有固定提交的源码证据，能定位 JEV 在哪里做决策 |
-| 🔭 Topic 已发现 | **1161** | GitHub `jev` topic 的完整快照，包含待核验项目与噪声 |
-| 🔗 Topic 中已核验 | **161** | 同时出现在发现层和核验层的项目 |
+JEV is TypeSafe AI's fast, typed decision model for classification, routing, scoring, ranking, verification, and guardrails. This atlas separates projects backed by inspectable source evidence from repositories that merely carry a topic label.
+
+<table>
+<tr>
+<td align="center" width="33%"><h2>479</h2><strong>Source-verified</strong><br><sub>Pinned evidence for the JEV decision point</sub></td>
+<td align="center" width="33%"><h2>1,169</h2><strong>Topic-discovered</strong><br><sub>The full public GitHub discovery snapshot</sub></td>
+<td align="center" width="33%"><h2>17</h2><strong>Real-world domains</strong><br><sub>From browser control to model routing</sub></td>
+</tr>
+</table>
 
 > [!IMPORTANT]
-> “已核验”表示查看过公开源码证据，不代表项目已做安全审计、性能复现或生产可用性背书。JEV 本体是托管模型；开源 SDK、集成和兼容实现不等于开放模型权重。
+> **Source-verified does not mean security-audited, benchmark-reproduced, or production-endorsed.** JEV itself is a hosted model; open SDKs, integrations, and compatible implementations are not open model weights.
 
-## 值得先看的项目
+## How trust flows through the atlas
 
-| 项目 | 做什么 | ⭐ | 许可证 |
+```mermaid
+flowchart LR
+    A[GitHub discovery] --> B{Evidence gate}
+    B -->|Pinned source found| C[Verified catalog]
+    B -->|Evidence missing| D[Discovery backlog]
+    C --> E[Searchable atlas]
+    C --> F[JSON datasets]
+    C --> G[Weekly refresh]
+```
+
+Every verified entry answers three questions: **What does it do? Where does JEV decide? What public source proves it?** The broader topic snapshot is retained for recall, but never presented as verified.
+
+## Projects worth opening first
+
+| Project | Why it matters | Stars | License |
 |---|---|---:|---|
-| [langchain-ai/langchain](https://github.com/langchain-ai/langchain) | 给 Python LangChain 流程加一个可选 Jev 分类节点，返回类别、概率和等级评分。 | 146831 | MIT |
-| [virattt/ai-hedge-fund](https://github.com/virattt/ai-hedge-fund) | 一个教育用途的 AI 对冲基金原型，其中可选 Jev 适配器把结构化判断接到基金决策流程。 | 63657 | MIT |
-| [BerriAI/litellm](https://github.com/BerriAI/litellm) | LiteLLM 的复杂度路由器可选用 Jev 判断请求应交给哪个模型档位。 | 59361 | Unknown |
-| [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi) | Oh My Pi 编程 Agent 内含可选的 TypeSafe 判断提供器，供小型决策流程调用。 | 32380 | MIT |
-| [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) | claude-code-templates 社区仓库中的 Jev 路由模组，为 Claude Code 子 Agent 建议模型与思考档位。 | 30897 | MIT |
-| [ComposioHQ/composio](https://github.com/ComposioHQ/composio) | Composio 的可选 TypeSafe provider，用 Jev 从工具与有限参数选项中做判断。 | 30279 | MIT |
-| [vercel/ai](https://github.com/vercel/ai) | AI SDK 中的 TypeSafe provider，让 TypeScript 应用通过统一 evaluate 接口调用 Jev。 | 26887 | Unknown |
-| [trycua/cua](https://github.com/trycua/cua) | Cua 仓库的 jev-use 预览示例：Driver 观察与执行，Jev 从有界候选中选择浏览器动作。 | 25783 | MIT |
-| [pydantic/pydantic-ai](https://github.com/pydantic/pydantic-ai) | Pydantic AI 的可选 Jev 模型：把输出模型里的布尔和枚举字段变成问题，拿回符合类型的判断。 | 20109 | MIT |
-| [elizaOS/eliza](https://github.com/elizaOS/eliza) | Eliza 源码中的可选 TypeSafe HTTP 适配器，默认没有注册到 Agent 运行时。 | 19406 | MIT |
+| [langchain-ai/langchain](https://github.com/langchain-ai/langchain) | An optional Jev classifier integration for Python LangChain workflows. | **146,831** | `MIT` |
+| [virattt/ai-hedge-fund](https://github.com/virattt/ai-hedge-fund) | An educational AI hedge-fund prototype with an optional Jev adapter for structured judgments in fund decision workflows. | **63,657** | `MIT` |
+| [BerriAI/litellm](https://github.com/BerriAI/litellm) | LiteLLM can use Jev to classify requests for its complexity-based model router. | **59,361** | `Unknown` |
+| [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi) | Oh My Pi includes an optional TypeSafe judgment provider for bounded decisions in coding-agent workflows. | **32,380** | `MIT` |
+| [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) | A community Claude Code Templates mod that uses Jev to suggest subagent models and reasoning levels. | **30,897** | `MIT` |
+| [ComposioHQ/composio](https://github.com/ComposioHQ/composio) | An optional TypeSafe provider for Composio that uses Jev to choose among tools and bounded argument options. | **30,279** | `MIT` |
+| [vercel/ai](https://github.com/vercel/ai) | The TypeSafe provider in AI SDK lets TypeScript applications call Jev through the shared evaluate interface. | **26,887** | `Unknown` |
+| [trycua/cua](https://github.com/trycua/cua) | Cua’s preview jev-use example pairs Driver observation and execution with bounded Jev browser-action choices. | **25,783** | `MIT` |
 
-## 生态分布
+## Explore the ecosystem
 
-| 分类 | 项目数 |
+| Domain | Projects |
 |---|---:|
-| SDK & Decision Frameworks | 90 |
-| Security & Guardrails | 41 |
-| High-Frequency & Simulation | 40 |
-| Routing & Cost Optimization | 38 |
-| Browser & OS Action | 38 |
-| Domain & Vertical Tools | 34 |
-| MCP & Integrations | 30 |
-| Context GC & Filter | 29 |
-| Evaluation & Observability | 29 |
-| CLI & Pipelines | 29 |
-| Data & Search | 28 |
-| Creative Tools | 16 |
-| Codebase & Graph Pathfinding | 13 |
-| Decision Tools | 12 |
-| SDK & Integrations | 6 |
-| Voice & Conversation | 4 |
-| Classification & Taxonomy | 2 |
+| SDK & Decision Frameworks | **90** |
+| Security & Guardrails | **41** |
+| High-Frequency & Simulation | **40** |
+| Routing & Cost Optimization | **38** |
+| Browser & OS Action | **38** |
+| Domain & Vertical Tools | **34** |
+| MCP & Integrations | **30** |
+| Context GC & Filter | **29** |
+| Evaluation & Observability | **29** |
+| CLI & Pipelines | **29** |
+| Data & Search | **28** |
+| Creative Tools | **16** |
+| Codebase & Graph Pathfinding | **13** |
+| Decision Tools | **12** |
+| SDK & Integrations | **6** |
+| Voice & Conversation | **4** |
+| Classification & Taxonomy | **2** |
 
-主要语言：Unknown 220 · TypeScript 99 · Python 70 · JavaScript 33 · Rust 14 · Go 11 · Ruby 5 · Swift 3
+**Leading languages:** `Unknown` 220 · `TypeScript` 99 · `Python` 70 · `JavaScript` 33 · `Rust` 14 · `Go` 11 · `Ruby` 5 · `Swift` 3
 
-## 如何使用
+## Use the atlas your way
 
-- 想找可直接用的项目：打开 [完整目录](CATALOG.md)，按领域浏览。
-- 想搜索、筛选、排序：打开 [在线搜索页面](https://periodblue.github.io/jev-project-atlas/)。
-- 想做分析或二次开发：使用 [已核验 JSON](data/verified-projects.json) 和 [完整发现 JSON](data/discovered-repos.json)。
-- 想提交遗漏：阅读 [贡献指南](CONTRIBUTING.md)，请附仓库地址和 JEV 的源码使用位置。
+| I want to… | Go here |
+|---|---|
+| Search and filter visually | **[Interactive atlas →](https://periodblue.github.io/jev-project-atlas/)** |
+| Read every verified entry | **[Full catalog →](CATALOG.md)** |
+| Analyze or build on the data | [Verified JSON](data/verified-projects.json) · [Discovery JSON](data/discovered-repos.json) |
+| Audit the inclusion rules | [Methodology](METHODOLOGY.md) |
+| Submit a missing project | [Contribution guide](CONTRIBUTING.md) |
 
-## 数据更新
+## Reproducible by default
 
 ```bash
 python scripts/sync.py
 ```
 
-脚本只依赖 Python 标准库，会重新抓取 GitHub topic、同步公开的源码核验数据并重建目录与搜索页。自动更新工作流每周运行一次，也可以手动触发。
+The zero-dependency sync script refreshes GitHub discovery, normalizes the source-reviewed dataset, and rebuilds both languages, both catalogs, and the live explorer. GitHub Actions runs it weekly.
 
-## 数据来源与致谢
+## Provenance
 
-已核验层基于 [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects) 的 MIT 许可数据，并在本仓库中进行字段规范化、分层和重新呈现；发现层直接来自 [GitHub `jev` topic](https://github.com/topics/jev)。详见 [第三方声明](THIRD_PARTY_NOTICES.md)。
+The verified layer builds on the MIT-licensed source review in [logicrw/awesome-jev-projects](https://github.com/logicrw/awesome-jev-projects), normalized and presented here as a two-layer atlas. Discovery comes directly from the [GitHub `jev` topic](https://github.com/topics/jev). See [third-party notices](THIRD_PARTY_NOTICES.md).
 
-## 许可证
+## License
 
-本仓库代码与原创内容采用 [MIT License](LICENSE)。各项目仍遵循它们各自的许可证；数据来源及再分发条款见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+Atlas code and original content are [MIT licensed](LICENSE). Listed projects keep their own licenses.

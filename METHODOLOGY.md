@@ -1,54 +1,56 @@
-# 方法与边界
+# Methodology and scope
 
-## 收录目标
+**English** · [简体中文](METHODOLOGY.zh-CN.md)
 
-JEV Project Atlas 追踪与 TypeSafe AI 的 JEV / System One 决策模型直接相关的公开 GitHub 项目，包括：
+## Inclusion target
 
-- 官方资源、SDK、适配器与示例；
-- 实际调用 JEV 的应用、Agent、MCP、CLI 与领域工具；
-- 兼容 JEV 输入/输出形态的独立开源实现；
-- 评测、可观测性、数据与研究工具；
-- 有明确源码证据的框架集成。
+JEV Project Atlas tracks public GitHub projects directly related to TypeSafe AI's JEV / System One decision model, including:
 
-仅在仓库名、描述、README 或 topic 中出现 “JEV”，但找不到实际使用位置的项目，不进入“源码已核验”层。
+- official resources, SDKs, adapters, and examples;
+- applications, agents, MCP servers, CLIs, and domain tools that call JEV;
+- independent open implementations of a JEV-compatible input/output shape;
+- evaluation, observability, data, and research tools;
+- framework integrations with concrete source evidence.
 
-## 两层数据模型
+A repository does not enter the source-verified layer merely because “JEV” appears in its name, description, README, or topics.
 
-### 1. 源码已核验
+## The two-layer data model
 
-每个条目至少有一个固定提交链接，能够定位 JEV 的调用、适配、决策点或兼容实现。固定提交避免默认分支变化后证据失效。
+### 1. Source-verified
 
-这里的“核验”不等于：
+Every entry has at least one immutable commit link locating a JEV call, adapter, decision point, or compatible implementation. Pinning the commit keeps the evidence stable when a default branch changes.
 
-- 运行或部署过项目；
-- 复现过作者声称的性能、延迟或成本；
-- 完成安全审计、许可证法律审查或供应链审计；
-- 认可项目质量或生产可用性。
+Verification does **not** mean that we:
 
-### 2. Topic 已发现
+- ran or deployed the project;
+- reproduced claimed performance, latency, or cost;
+- completed a security, legal-license, or supply-chain audit;
+- endorse the project's quality or production readiness.
 
-抓取 GitHub `jev` topic 下的所有可见仓库。Topic 由仓库维护者自行添加，因此可能包含：
+### 2. Topic-discovered
 
-- 真实但尚未审查的 JEV 项目；
-- 只在计划中提及 JEV 的项目；
-- 与 JEV 无实质关系的标签噪声；
-- 重复、归档、实验或低信息量仓库。
+The discovery layer collects all repositories returned for GitHub's `jev` topic. Topics are self-assigned and can include:
 
-因此发现层适合查漏，不适合作为推荐榜单。
+- genuine JEV projects awaiting review;
+- projects that only mention a future JEV integration;
+- unrelated topic noise;
+- duplicate, archived, experimental, or low-information repositories.
 
-## 更新与去重
+The discovery layer is useful for recall, not ranking or recommendation.
 
-- 仓库以不区分大小写的 `owner/name` 作为唯一键。
-- 已核验项目按星标数降序、仓库名升序生成目录。
-- Topic 页面从第 1 页开始抓取，连续两个空页后停止。
-- 所有快照记录 UTC 日期；动态指标只代表当次同步。
+## Refresh and deduplication
 
-## 完整性的定义
+- Case-insensitive `owner/name` is the repository identity key.
+- Verified projects are rendered by stars descending, then repository name ascending.
+- GitHub Search is split into starred and zero-star partitions to avoid the 1,000-result cap.
+- All snapshots use UTC dates; dynamic metrics represent only the latest refresh.
 
-“完整”是一个可审计的目标，不是绝对承诺：
+## What “complete” means
 
-- 发现层覆盖同步时 GitHub topic 对匿名访问者可见的仓库；
-- 核验层覆盖上游公开、源码审查过的项目；
-- 私有仓库、被删除仓库、未使用 `jev` topic 且未被社区发现的项目无法自动保证覆盖。
+Completeness is an auditable target, not an absolute promise:
 
-如果你发现遗漏，请提交 Issue，并提供仓库 URL、JEV 使用位置和一行简介。
+- the discovery layer covers repositories visible to anonymous users at refresh time;
+- the verified layer covers public projects reviewed by the upstream source-evidence process;
+- private, deleted, undiscovered, or untagged repositories cannot be guaranteed.
+
+If something is missing, open an issue with the repository URL, the exact JEV integration point, and a one-line description.

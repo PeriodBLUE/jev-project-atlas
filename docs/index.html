@@ -1,44 +1,48 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="搜索和筛选 GitHub 上源码已核验的 JEV 项目。" />
+  <meta name="description" content="Search and filter source-verified JEV projects on GitHub." />
   <title>JEV Project Atlas</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="orb orb-a"></div><div class="orb orb-b"></div>
   <header class="hero">
-    <a class="eyebrow" href="https://github.com/PeriodBLUE/jev-project-atlas">JEV PROJECT ATLAS</a>
-    <h1>找到 JEV 生态里<br><span>真正有源码证据</span>的项目。</h1>
-    <p>面向开发者的开源项目地图。搜索、筛选、理解 Jev 在哪里做出决策。</p>
+    <div class="topline">
+      <a class="eyebrow" href="https://github.com/PeriodBLUE/jev-project-atlas">JEV PROJECT ATLAS</a>
+      <button class="locale-toggle" id="locale-toggle" type="button" aria-label="Switch language">中文</button>
+    </div>
+    <h1 id="hero-title">Find the JEV projects<br><span>that have source evidence.</span></h1>
+    <p id="hero-copy">An open-source map for developers. Search, filter, and understand where JEV makes the decision.</p>
     <div class="metrics" id="metrics"></div>
   </header>
 
   <main>
-    <section class="toolbar" aria-label="项目筛选器">
+    <section class="toolbar" id="toolbar" aria-label="Project filters">
       <label class="search">
         <span>⌕</span>
-        <input id="query" type="search" placeholder="搜索仓库、用途、决策点或标签…" autocomplete="off" />
+        <input id="query" type="search" placeholder="Search repos, use cases, decision points, or tags…" autocomplete="off" />
       </label>
-      <select id="category" aria-label="分类"><option value="">全部分类</option></select>
-      <select id="language" aria-label="语言"><option value="">全部语言</option></select>
-      <select id="sort" aria-label="排序">
-        <option value="stars">最多星标</option>
-        <option value="name">名称 A–Z</option>
-        <option value="category">按分类</option>
-      </select>
+      <select id="category" aria-label="Category"></select>
+      <select id="language" aria-label="Language"></select>
+      <select id="sort" aria-label="Sort order"></select>
     </section>
 
-    <div class="result-line"><strong id="count">0</strong> 个项目 <span id="updated"></span></div>
+    <div class="result-line"><strong id="count">0</strong> <span id="result-label">projects</span> <span id="updated"></span></div>
     <section class="grid" id="grid" aria-live="polite"></section>
-    <div class="empty" id="empty" hidden>没有匹配项目。换个关键词或清除筛选试试。</div>
+    <div class="empty" id="empty" hidden>No matching projects. Try another query or clear a filter.</div>
   </main>
 
   <footer>
-    <p>源码核验 ≠ 安全审计或性能背书。数据与方法完全公开。</p>
-    <nav><a href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/CATALOG.md">完整目录</a><a href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/METHODOLOGY.md">方法</a><a href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/data/verified-projects.json">JSON</a><a href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/CONTRIBUTING.md">贡献</a></nav>
+    <p id="footer-note">Source verification is not a security audit or performance endorsement. The data and method are public.</p>
+    <nav>
+      <a id="catalog-link" href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/CATALOG.md">Full catalog</a>
+      <a id="method-link" href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/METHODOLOGY.md">Method</a>
+      <a href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/data/verified-projects.json">JSON</a>
+      <a id="contribute-link" href="https://github.com/PeriodBLUE/jev-project-atlas/blob/main/CONTRIBUTING.md">Contribute</a>
+    </nav>
   </footer>
   <script src="data.js"></script>
   <script src="app.js"></script>

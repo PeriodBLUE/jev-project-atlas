@@ -1,27 +1,29 @@
-# 贡献指南
+# Contributing
 
-感谢帮助完善 JEV 生态地图。
+**English** · [简体中文](CONTRIBUTING.zh-CN.md)
 
-## 提交新项目
+Thank you for helping improve the JEV ecosystem map.
 
-请创建 Issue，并尽量提供：
+## Submit a project
 
-1. GitHub 仓库 URL；
-2. 一句话说明项目解决什么问题；
-3. JEV 在哪里参与决策；
-4. 最好附上固定 commit 的源码链接；
-5. 项目许可证。
+Open an issue and include as much of the following as possible:
 
-只有 topic、仓库名或 README 提及 JEV，但没有可定位源码证据的项目，会先保留在“待核验”发现层。
+1. GitHub repository URL;
+2. a factual one-line description;
+3. where JEV participates in the decision;
+4. preferably, an immutable commit link to that source;
+5. the project license.
 
-## 修改分类或描述
+A project mentioned only by topic, repository name, or README stays in the unverified discovery layer until its integration can be located in public source.
 
-请说明当前内容哪里不准确，并附公开证据。描述应保持中性，避免未经复现的“最快”“最佳”“完全兼容”等营销性结论。
+## Correct a category or description
 
-## 本地更新
+Explain what is inaccurate and attach public evidence. Keep descriptions neutral; avoid “fastest,” “best,” or “fully compatible” unless independently reproduced.
+
+## Refresh locally
 
 ```bash
 python scripts/sync.py
 ```
 
-运行后请确认 `README.md`、`CATALOG.md`、`data/` 与 `docs/data.js` 同步变化。
+After the run, confirm that both README files, both catalogs, `data/`, and `docs/data.js` changed together.

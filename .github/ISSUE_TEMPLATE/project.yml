@@ -1,0 +1,30 @@
+name: Submit a JEV project
+description: Suggest a missing project or provide source evidence for an unverified repository.
+title: "[Project]: "
+labels: ["project-submission"]
+body:
+  - type: input
+    id: repository
+    attributes:
+      label: Repository URL
+      placeholder: https://github.com/owner/repo
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What does the project do?
+      description: One or two factual sentences.
+    validations:
+      required: true
+  - type: input
+    id: evidence
+    attributes:
+      label: Fixed-commit source evidence
+      description: Link to the exact file and commit where JEV is used.
+      placeholder: https://github.com/owner/repo/blob/COMMIT/path/to/file
+  - type: input
+    id: license
+    attributes:
+      label: License
+      placeholder: MIT

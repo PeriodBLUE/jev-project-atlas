@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="搜索和筛选 GitHub 上源码已核验的 JEV 项目。" />
+  <title>JEV Project Atlas</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="orb orb-a"></div><div class="orb orb-b"></div>
+  <header class="hero">
+    <a class="eyebrow" href="../README.md">JEV PROJECT ATLAS</a>
+    <h1>找到 JEV 生态里<br><span>真正有源码证据</span>的项目。</h1>
+    <p>面向开发者的开源项目地图。搜索、筛选、理解 Jev 在哪里做出决策。</p>
+    <div class="metrics" id="metrics"></div>
+  </header>
+
+  <main>
+    <section class="toolbar" aria-label="项目筛选器">
+      <label class="search">
+        <span>⌕</span>
+        <input id="query" type="search" placeholder="搜索仓库、用途、决策点或标签…" autocomplete="off" />
+      </label>
+      <select id="category" aria-label="分类"><option value="">全部分类</option></select>
+      <select id="language" aria-label="语言"><option value="">全部语言</option></select>
+      <select id="sort" aria-label="排序">
+        <option value="stars">最多星标</option>
+        <option value="name">名称 A–Z</option>
+        <option value="category">按分类</option>
+      </select>
+    </section>
+
+    <div class="result-line"><strong id="count">0</strong> 个项目 <span id="updated"></span></div>
+    <section class="grid" id="grid" aria-live="polite"></section>
+    <div class="empty" id="empty" hidden>没有匹配项目。换个关键词或清除筛选试试。</div>
+  </main>
+
+  <footer>
+    <p>源码核验 ≠ 安全审计或性能背书。数据与方法完全公开。</p>
+    <nav><a href="../CATALOG.md">完整目录</a><a href="../METHODOLOGY.md">方法</a><a href="../data/verified-projects.json">JSON</a><a href="../CONTRIBUTING.md">贡献</a></nav>
+  </footer>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

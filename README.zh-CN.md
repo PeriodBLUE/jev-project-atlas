@@ -4,11 +4,11 @@
 
 ### 看清哪些 JEV 项目是真的。
 
-**725 个项目附有固定源码证据，可按用途、语言、许可证以及 JEV 的准确决策点搜索。**
+**854 个项目附有固定源码证据，可按用途、语言、许可证以及 JEV 的准确决策点搜索。**
 
-[![verified](https://img.shields.io/badge/源码已核验-725-14b8a6?style=flat-square)](CATALOG.zh-CN.md)
-[![discovered](https://img.shields.io/badge/Topic已发现-1807-3b82f6?style=flat-square)](data/discovered-repos.json)
-[![updated](https://img.shields.io/badge/更新-2026--09--28-8b5cf6?style=flat-square)](METHODOLOGY.zh-CN.md)
+[![verified](https://img.shields.io/badge/源码已核验-854-14b8a6?style=flat-square)](CATALOG.zh-CN.md)
+[![discovered](https://img.shields.io/badge/Topic已发现-2000-3b82f6?style=flat-square)](data/discovered-repos.json)
+[![updated](https://img.shields.io/badge/更新-2026--10--05-8b5cf6?style=flat-square)](METHODOLOGY.zh-CN.md)
 [![license](https://img.shields.io/badge/许可证-MIT-f59e0b?style=flat-square)](LICENSE)
 
 **[打开在线全景图 →](https://periodblue.github.io/jev-project-atlas/?lang=zh)** &nbsp;·&nbsp; [浏览完整目录](CATALOG.zh-CN.md) &nbsp;·&nbsp; [使用数据](#使用数据)
@@ -25,15 +25,15 @@
 
 ## 去掉噪声之后的 JEV 生态
 
-GitHub 上已有 **1,807 个仓库带有 `jev` topic**。但标签无法说明项目是在真实调用 JEV、计划未来接入、模仿接口，还是仅仅误贴了标签。
+GitHub 上已有 **2,000 个仓库带有 `jev` topic**。但标签无法说明项目是在真实调用 JEV、计划未来接入、模仿接口，还是仅仅误贴了标签。
 
 **JEV Project Atlas 把它们分清楚。** 所有候选都会被保留，但只有在公开源码中找到真实集成或决策点，项目才会进入主目录。
 
 <table>
 <tr>
-<td align="center" width="33%"><h2>725</h2><b>已核验项目</b><br><sub>每项都链接到不可变源码</sub></td>
+<td align="center" width="33%"><h2>854</h2><b>已核验项目</b><br><sub>每项都链接到不可变源码</sub></td>
 <td align="center" width="33%"><h2>17</h2><b>应用领域</b><br><sub>从 Agent 到数据库</sub></td>
-<td align="center" width="33%"><h2>1,807</h2><b>持续监测仓库</b><br><sub>完整发现层始终保留</sub></td>
+<td align="center" width="33%"><h2>2,000</h2><b>持续监测仓库</b><br><sub>完整发现层始终保留</sub></td>
 </tr>
 </table>
 
@@ -47,7 +47,7 @@ GitHub 上已有 **1,807 个仓库带有 `jev` topic**。但标签无法说明�
 </tr>
 </table>
 
-**[查看全部 725 个已核验项目 →](CATALOG.zh-CN.md)**
+**[查看全部 854 个已核验项目 →](CATALOG.zh-CN.md)**
 
 ## 为什么可以相信这份目录？
 

@@ -4,11 +4,11 @@
 
 ### Know which JEV projects are real.
 
-**859 projects with pinned source evidence — searchable by use case, language, license, and the exact point where JEV makes a decision.**
+**864 projects with pinned source evidence — searchable by use case, language, license, and the exact point where JEV makes a decision.**
 
-[![verified](https://img.shields.io/badge/source_verified-859-14b8a6?style=flat-square)](CATALOG.md)
+[![verified](https://img.shields.io/badge/source_verified-864-14b8a6?style=flat-square)](CATALOG.md)
 [![discovered](https://img.shields.io/badge/topic_discovered-2000-3b82f6?style=flat-square)](data/discovered-repos.json)
-[![updated](https://img.shields.io/badge/updated-2026--10--12-8b5cf6?style=flat-square)](METHODOLOGY.md)
+[![updated](https://img.shields.io/badge/updated-2026--10--19-8b5cf6?style=flat-square)](METHODOLOGY.md)
 [![license](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
 
 **[Explore the live atlas →](https://periodblue.github.io/jev-project-atlas/)** &nbsp;·&nbsp; [Browse the catalog](CATALOG.md) &nbsp;·&nbsp; [Use the data](#use-the-data)
@@ -31,7 +31,7 @@ GitHub has **2,000 repositories tagged `jev`**. A topic tells you almost nothing
 
 <table>
 <tr>
-<td align="center" width="33%"><h2>859</h2><b>verified projects</b><br><sub>each linked to immutable source</sub></td>
+<td align="center" width="33%"><h2>864</h2><b>verified projects</b><br><sub>each linked to immutable source</sub></td>
 <td align="center" width="33%"><h2>17</h2><b>application domains</b><br><sub>from agents to databases</sub></td>
 <td align="center" width="33%"><h2>2,000</h2><b>repos monitored</b><br><sub>the recall layer stays searchable</sub></td>
 </tr>
@@ -47,7 +47,7 @@ GitHub has **2,000 repositories tagged `jev`**. A topic tells you almost nothing
 </tr>
 </table>
 
-**[See all 859 verified projects →](CATALOG.md)**
+**[See all 864 verified projects →](CATALOG.md)**
 
 ## Why trust this list?
 

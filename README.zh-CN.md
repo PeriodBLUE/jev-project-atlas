@@ -4,11 +4,11 @@
 
 ### 看清哪些 JEV 项目是真的。
 
-**859 个项目附有固定源码证据，可按用途、语言、许可证以及 JEV 的准确决策点搜索。**
+**864 个项目附有固定源码证据，可按用途、语言、许可证以及 JEV 的准确决策点搜索。**
 
-[![verified](https://img.shields.io/badge/源码已核验-859-14b8a6?style=flat-square)](CATALOG.zh-CN.md)
+[![verified](https://img.shields.io/badge/源码已核验-864-14b8a6?style=flat-square)](CATALOG.zh-CN.md)
 [![discovered](https://img.shields.io/badge/Topic已发现-2000-3b82f6?style=flat-square)](data/discovered-repos.json)
-[![updated](https://img.shields.io/badge/更新-2026--10--12-8b5cf6?style=flat-square)](METHODOLOGY.zh-CN.md)
+[![updated](https://img.shields.io/badge/更新-2026--10--19-8b5cf6?style=flat-square)](METHODOLOGY.zh-CN.md)
 [![license](https://img.shields.io/badge/许可证-MIT-f59e0b?style=flat-square)](LICENSE)
 
 **[打开在线全景图 →](https://periodblue.github.io/jev-project-atlas/?lang=zh)** &nbsp;·&nbsp; [浏览完整目录](CATALOG.zh-CN.md) &nbsp;·&nbsp; [使用数据](#使用数据)
@@ -31,7 +31,7 @@ GitHub 上已有 **2,000 个仓库带有 `jev` topic**。但标签无法说明�
 
 <table>
 <tr>
-<td align="center" width="33%"><h2>859</h2><b>已核验项目</b><br><sub>每项都链接到不可变源码</sub></td>
+<td align="center" width="33%"><h2>864</h2><b>已核验项目</b><br><sub>每项都链接到不可变源码</sub></td>
 <td align="center" width="33%"><h2>17</h2><b>应用领域</b><br><sub>从 Agent 到数据库</sub></td>
 <td align="center" width="33%"><h2>2,000</h2><b>持续监测仓库</b><br><sub>完整发现层始终保留</sub></td>
 </tr>
@@ -47,7 +47,7 @@ GitHub 上已有 **2,000 个仓库带有 `jev` topic**。但标签无法说明�
 </tr>
 </table>
 
-**[查看全部 859 个已核验项目 →](CATALOG.zh-CN.md)**
+**[查看全部 864 个已核验项目 →](CATALOG.zh-CN.md)**
 
 ## 为什么可以相信这份目录？
 

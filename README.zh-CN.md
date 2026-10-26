@@ -8,7 +8,7 @@
 
 [![verified](https://img.shields.io/badge/源码已核验-864-14b8a6?style=flat-square)](CATALOG.zh-CN.md)
 [![discovered](https://img.shields.io/badge/Topic已发现-2000-3b82f6?style=flat-square)](data/discovered-repos.json)
-[![updated](https://img.shields.io/badge/更新-2026--10--19-8b5cf6?style=flat-square)](METHODOLOGY.zh-CN.md)
+[![updated](https://img.shields.io/badge/更新-2026--10--26-8b5cf6?style=flat-square)](METHODOLOGY.zh-CN.md)
 [![license](https://img.shields.io/badge/许可证-MIT-f59e0b?style=flat-square)](LICENSE)
 
 **[打开在线全景图 →](https://periodblue.github.io/jev-project-atlas/?lang=zh)** &nbsp;·&nbsp; [浏览完整目录](CATALOG.zh-CN.md) &nbsp;·&nbsp; [使用数据](#使用数据)

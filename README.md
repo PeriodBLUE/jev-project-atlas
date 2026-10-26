@@ -8,7 +8,7 @@
 
 [![verified](https://img.shields.io/badge/source_verified-864-14b8a6?style=flat-square)](CATALOG.md)
 [![discovered](https://img.shields.io/badge/topic_discovered-2000-3b82f6?style=flat-square)](data/discovered-repos.json)
-[![updated](https://img.shields.io/badge/updated-2026--10--19-8b5cf6?style=flat-square)](METHODOLOGY.md)
+[![updated](https://img.shields.io/badge/updated-2026--10--26-8b5cf6?style=flat-square)](METHODOLOGY.md)
 [![license](https://img.shields.io/badge/license-MIT-f59e0b?style=flat-square)](LICENSE)
 
 **[Explore the live atlas →](https://periodblue.github.io/jev-project-atlas/)** &nbsp;·&nbsp; [Browse the catalog](CATALOG.md) &nbsp;·&nbsp; [Use the data](#use-the-data)
